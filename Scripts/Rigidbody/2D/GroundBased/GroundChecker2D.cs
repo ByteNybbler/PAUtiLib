@@ -37,7 +37,7 @@ public class GroundChecker2D : MonoBehaviour
     }
 
     // Gets the angle that corresponds to the current up direction.
-    private float GetUpAngle()
+    private Angle GetUpAngle()
     {
         return upDirection.GetUpAngle();
     }
@@ -45,7 +45,7 @@ public class GroundChecker2D : MonoBehaviour
     // Update the normal angles for the contact filter.
     private void UpdateNormals()
     {
-        float upAngle = GetUpAngle();
+        float upAngle = GetUpAngle().GetDegrees();
         filterGround.SetNormalAngle(upAngle - maxSlopeAngle, upAngle + maxSlopeAngle);
     }
 

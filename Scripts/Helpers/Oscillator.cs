@@ -33,7 +33,8 @@ public class Oscillator
     public float SampleAmplitude(float deltaTime)
     {
         progress += deltaTime * speed;
-        while (progress > UtilCircle.TWO_PI)
+        /*
+        while (progress > Angle.TWO_PI)
         {
             progress -= UtilCircle.TWO_PI;
         }
@@ -41,6 +42,8 @@ public class Oscillator
         {
             progress += UtilCircle.TWO_PI;
         }
+        */
+        progress = UtilPeriodic.MoveIntoInterval(progress, Angle.INTERVAL_UNSIGNED_RADIANS);
         return magnitude * waveform(progress);
     }
 

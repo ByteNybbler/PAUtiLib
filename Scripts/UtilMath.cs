@@ -41,6 +41,13 @@ public class UtilMath
         else return 0;
     }
 
+    // Return different values based on a boolean.
+    public static float BooleanToFloat(bool boolean,
+        float valueTrue = 0.0f, float valueFalse = 180.0f)
+    {
+        return boolean ? valueTrue : valueFalse;
+    }
+
     // Returns the product of several values.
     public static float Product(params float[] values)
     {

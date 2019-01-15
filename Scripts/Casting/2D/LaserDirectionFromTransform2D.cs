@@ -16,17 +16,18 @@ public class LaserDirectionFromTransform2D : MonoBehaviour
 
     private float GetDegrees()
     {
-        float result = transform.rotation.eulerAngles.z + degreesOffset;
+        Angle result = Angle.FromDegrees(
+            transform.rotation.eulerAngles.z + degreesOffset);
         Vector2 scale = laser.transform.lossyScale;
         if (scale.x < 0.0f)
         {
-            result = UtilCircle.MirrorAngleHorizontal(result);
+            result.MirrorHorizontal();
         }
         if (scale.y < 0.0f)
         {
-            result = UtilCircle.MirrorAngleVertical(result);
+            result.MirrorVertical();
         }
-        return result;
+        return result.GetDegrees();
     }
 
     private void UpdateDirection()

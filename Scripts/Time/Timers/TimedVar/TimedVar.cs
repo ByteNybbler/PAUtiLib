@@ -1,14 +1,14 @@
 ﻿// Author(s): Paul Calande
 // Data class for a variable that is utilized periodically.
 
-public class PeriodicVar<T>
+public class TimedVar<T>
 {
     // The variable to be wrapped.
     T var;
     // The number of seconds between each utilization of this variable.
     float seconds;
 
-    public PeriodicVar(T var, float seconds)
+    public TimedVar(T var, float seconds)
     {
         this.var = var;
         this.seconds = seconds;

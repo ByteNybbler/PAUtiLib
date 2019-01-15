@@ -24,7 +24,7 @@ public class TriggerEventNewDownDirection2D : MonoBehaviour
         TriggerNewDownDirection2D dd = collision.GetComponent<TriggerNewDownDirection2D>();
         if (dd != null)
         {
-            upDirection.SetDownAngle(dd.GetDownDirectionDegrees());
+            upDirection.SetDownAngle(dd.GetDownDirection());
         }
     }
 }

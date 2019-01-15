@@ -1,41 +1,41 @@
 ﻿// Author(s): Paul Calande
-// A collection of timers for utilizing PeriodicVars that wrap a given type T.
+// A collection of timers for utilizing TimedVars that wrap a given type T.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PeriodicVarTimers<T>
+public class TimedVarTimers<T>
 {
     // Callback for when a PeriodicVar's time runs out.
     public delegate void TimerFinishedHandler(float secondsOverflow, T var);
     TimerFinishedHandler TimerFinished;
 
     // Dictionary that keeps track of the time passed for each PeriodicVar.
-    Dictionary<PeriodicVar<T>, Timer> timers = new Dictionary<PeriodicVar<T>, Timer>();
+    Dictionary<TimedVar<T>, Timer> timers = new Dictionary<TimedVar<T>, Timer>();
 
-    public PeriodicVarTimers(TimerFinishedHandler callback)
+    public TimedVarTimers(TimerFinishedHandler callback)
     {
         TimerFinished = callback;
     }
 
-    public void Add(PeriodicVar<T> var)
+    public void Add(TimedVar<T> var)
     {
         Timer timer = new Timer(var.GetSeconds(), (t) => TimerFinished(t, var.GetVar()));
         timer.Run();
         timers.Add(var, timer);
     }
 
-    public void Remove(PeriodicVar<T> var)
+    public void Remove(TimedVar<T> var)
     {
         timers.Remove(var);
     }
 
     public void Tick(float deltaTime)
     {
-        Dictionary<PeriodicVar<T>, Timer> iterate =
-            new Dictionary<PeriodicVar<T>, Timer>(timers);
-        foreach (KeyValuePair<PeriodicVar<T>, Timer> pair in iterate)
+        Dictionary<TimedVar<T>, Timer> iterate =
+            new Dictionary<TimedVar<T>, Timer>(timers);
+        foreach (KeyValuePair<TimedVar<T>, Timer> pair in iterate)
         {
             pair.Value.Tick(deltaTime);
         }

@@ -31,7 +31,7 @@ public class Mover2D : MonoBehaviour
 
     // The total position offset accumulated over this FixedUpdate step.
     Vector2 differencePosition = Vector2.zero;
-    // The total rotation offset accumulated over this FixedUpdate step.
+    // The total rotation offset accumulated over this FixedUpdate step in degrees.
     float differenceRotation = 0.0f;
     // The velocity of the object.
     Vector2 velocity = Vector2.zero;
@@ -44,6 +44,11 @@ public class Mover2D : MonoBehaviour
     public void OffsetRotation(float degrees)
     {
         differenceRotation += degrees;
+    }
+
+    public void OffsetRotation(Angle angle)
+    {
+        differenceRotation += angle.GetDegrees();
     }
 
     public void TeleportPosition(Vector3 newPos)
@@ -70,6 +75,11 @@ public class Mover2D : MonoBehaviour
         }
     }
 
+    public void TeleportRotation(Angle newRotation)
+    {
+        TeleportRotation(newRotation.GetDegrees());
+    }
+
     public Vector2 GetPosition()
     {
         if (myRigidbody == null)
@@ -82,6 +92,7 @@ public class Mover2D : MonoBehaviour
         }
     }
 
+    // Returns the mover's rotation in degrees.
     public float GetRotation()
     {
         if (myRigidbody == null)

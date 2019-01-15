@@ -1,14 +1,14 @@
 ﻿// Author(s): Paul Calande
-// Trigger-based application of MonoPeriodicVar to MonoPeriodicVarTimers.
+// Trigger-based application of MonoPeriodicVar to MonoTimedVarTimers.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerEventPeriodicVarTimers2D<TVar, TMonoPeriodicVar,
-    TMonoPeriodicVarTimers> : MonoBehaviour
-    where TMonoPeriodicVar : MonoPeriodicVar<TVar>
-    where TMonoPeriodicVarTimers : MonoPeriodicVarTimers<TVar>
+public class TriggerEventTimedVarTimers2D<TVar, TMonoTimedVar,
+    TMonoTimedVarTimers> : MonoBehaviour
+    where TMonoTimedVar : MonoTimedVar<TVar>
+    where TMonoTimedVarTimers : MonoTimedVarTimers<TVar>
 {
     [SerializeField]
     [Tooltip("The trigger event for entering the trigger.")]
@@ -18,7 +18,7 @@ public class TriggerEventPeriodicVarTimers2D<TVar, TMonoPeriodicVar,
     TriggerEvent2D triggerExit;
     [SerializeField]
     [Tooltip("The timers to populate.")]
-    TMonoPeriodicVarTimers timers;
+    TMonoTimedVarTimers timers;
 
     private void Start()
     {
@@ -34,16 +34,16 @@ public class TriggerEventPeriodicVarTimers2D<TVar, TMonoPeriodicVar,
 
     private void Enter(Collider2D collision)
     {
-        TMonoPeriodicVar periodicVar = collision.GetComponent<TMonoPeriodicVar>();
-        if (periodicVar != null)
+        TMonoTimedVar timedVar = collision.GetComponent<TMonoTimedVar>();
+        if (timedVar != null)
         {
-            timers.Add(periodicVar.Get());
+            timers.Add(timedVar.Get());
         }
     }
 
     private void Exit(Collider2D collision)
     {
-        TMonoPeriodicVar periodicVar = collision.GetComponent<TMonoPeriodicVar>();
+        TMonoTimedVar periodicVar = collision.GetComponent<TMonoTimedVar>();
         if (periodicVar != null)
         {
             timers.Remove(periodicVar.Get());

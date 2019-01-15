@@ -1,32 +1,32 @@
 ﻿// Author(s): Paul Calande
-// MonoBehaviour wrapper for a PeriodicVarTimer.
+// MonoBehaviour wrapper for a TimedVarTimer.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoPeriodicVarTimers<T> : MonoBehaviour
+public class MonoTimedVarTimers<T> : MonoBehaviour
 {
     // Invoked when a PeriodicVar's time runs out.
-    public event PeriodicVarTimers<T>.TimerFinishedHandler TimerFinished;
+    public event TimedVarTimers<T>.TimerFinishedHandler TimerFinished;
 
     [SerializeField]
     TimeScale timeScale;
 
     // The wrapped timers.
-    PeriodicVarTimers<T> timers;
+    TimedVarTimers<T> timers;
 
     private void Awake()
     {
-        timers = new PeriodicVarTimers<T>(OnTimerFinished);
+        timers = new TimedVarTimers<T>(OnTimerFinished);
     }
 
-    public void Add(PeriodicVar<T> var)
+    public void Add(TimedVar<T> var)
     {
         timers.Add(var);
     }
 
-    public void Remove(PeriodicVar<T> var)
+    public void Remove(TimedVar<T> var)
     {
         timers.Remove(var);
     }

@@ -1,13 +1,13 @@
 ﻿// Author(s): Paul Calande
-// MonoBehaviour wrapper for a PeriodicVar.
+// MonoBehaviour wrapper for a TimedVar.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoPeriodicVar<T> : MonoBehaviour
+public class MonoTimedVar<T> : MonoBehaviour
 {
-    protected PeriodicVar<T> pvar = new PeriodicVar<T>(default(T), 1.0f);
+    protected TimedVar<T> pvar = new TimedVar<T>(default(T), 1.0f);
 
     public void SetVar(T var)
     {
@@ -29,7 +29,7 @@ public class MonoPeriodicVar<T> : MonoBehaviour
         return pvar.GetSeconds();
     }
 
-    public PeriodicVar<T> Get()
+    public TimedVar<T> Get()
     {
         return pvar;
     }

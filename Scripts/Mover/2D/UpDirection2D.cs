@@ -14,7 +14,8 @@ public class UpDirection2D : MonoBehaviour
 
     [SerializeField]
     [Tooltip("The angle corresponding to the upwards direction.")]
-    float upAngle = 90.0f;
+    //float upAngle = 90.0f;
+    Angle upAngle;
 
     private void Awake()
     {
@@ -22,18 +23,19 @@ public class UpDirection2D : MonoBehaviour
     }
 
     // Returns the angle corresponding to the upwards direction.
-    public float GetUpAngle()
+    public Angle GetUpAngle()
     {
-        return upAngle;
+        return upAngle.DeepCopy();
     }
 
     private void NormalizeAngle()
     {
-        upAngle = UtilCircle.AngleDegreesToUnsignedRange(upAngle);
+        //upAngle = UtilCircle.AngleDegreesToUnsignedRange(upAngle);
+        upAngle.MoveIntoUnsignedInterval();
     }
 
     // Changes the angle corresponding to the upwards direction.
-    public void SetUpAngle(float angle)
+    public void SetUpAngle(Angle angle)
     {
         upAngle = angle;
         NormalizeAngle();
@@ -41,15 +43,16 @@ public class UpDirection2D : MonoBehaviour
     }
 
     // Sets the up angle based on the given down angle.
-    public void SetDownAngle(float angle)
+    public void SetDownAngle(Angle angle)
     {
-        SetUpAngle(angle + 180.0f);
+        SetUpAngle(Angle.FromDegrees(angle.GetDegrees() + 180.0f));
     }
 
     // Returns the vector corresponding to the upwards direction.
     public Vector2 GetUpVector()
     {
-        return UtilHeading2D.HeadingVectorFromDegrees(upAngle);
+        return upAngle.GetHeadingVector();
+            //UtilHeading2D.HeadingVectorFromDegrees(upAngle.GetDegrees());
     }
     
     // Returns the vector corresponding to the downwards direction.
@@ -62,13 +65,13 @@ public class UpDirection2D : MonoBehaviour
     // upwards direction that this script defines.
     public Vector2 SpaceEnter(Vector2 toTransform)
     {
-        return Quaternion.Euler(0.0f, 0.0f, 90.0f - upAngle) * toTransform;
+        return Quaternion.Euler(0.0f, 0.0f, 90.0f - upAngle.GetDegrees()) * toTransform;
     }
 
     // Inverse transformation of the SpaceEnter function.
     public Vector2 SpaceExit(Vector2 toTransform)
     {
-        return Quaternion.Euler(0.0f, 0.0f, upAngle - 90.0f) * toTransform;
+        return Quaternion.Euler(0.0f, 0.0f, upAngle.GetDegrees() - 90.0f) * toTransform;
     }
 
     private void OnUpAngleChanged()

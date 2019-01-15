@@ -13,6 +13,6 @@ public class TriggerNewDownDirectionFromTransform2D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        dd.SetDownDirectionDegrees(transform.rotation.eulerAngles.z);
+        dd.SetDownDirection(Angle.FromDegrees(transform.rotation.eulerAngles.z));
     }
 }

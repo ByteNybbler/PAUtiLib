@@ -6,14 +6,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoPeriodicIntTimersToDamage : MonoBehaviour
+public class MonoTimedIntTimersToDamage : MonoBehaviour
 {
     [SerializeField]
     [Tooltip("The health to apply damage to.")]
     Health health;
     [SerializeField]
     [Tooltip("The periodic integer timers to retrieve damage values from.")]
-    MonoPeriodicIntTimers timers;
+    MonoTimedIntTimers timers;
     [SerializeField]
     [Tooltip("The value change text creator to use, if applicable.")]
     ValueChangeTextCreator textCreator;

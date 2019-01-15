@@ -28,10 +28,20 @@ public class RotateGraduallyToAngle2D : MonoBehaviour
         targetDegrees = degrees + offsetDegrees;
     }
 
+    public void SetAngle(Angle angle)
+    {
+        SetAngle(angle.GetDegrees());
+    }
+
     private void UpdateCurrentDegreesHeading()
     {
-        mover.TeleportRotation(UtilApproach.AngleDegrees(mover.GetRotation(),
+        mover.TeleportRotation(Angle.FromDegrees(mover.GetRotation())
+            .Approach(Angle.FromDegrees(targetDegrees), Angle.FromDegrees(
+                degreeChangePerSecond * timeScale.DeltaTime())));
+        /*
+            UtilApproach.AngleDegrees(mover.GetRotation(),
             targetDegrees, degreeChangePerSecond * timeScale.DeltaTime()));
+            */
     }
 
     private void FixedUpdate()

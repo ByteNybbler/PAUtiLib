@@ -40,8 +40,8 @@ public class VelocityWheel2D : MonoBehaviour
 
     private void Rotate(float linearVelocity)
     {
-        float angularVelocity = UtilCircle.AngularVelocityDegrees(linearVelocity, radius)
-            * UtilMath.Sign(inverted);
+        float angularVelocity = Angle.FromAngularVelocity(linearVelocity, radius)
+            .GetDegrees() * UtilMath.Sign(inverted);
         mover.OffsetRotation(angularVelocity);
     }
 

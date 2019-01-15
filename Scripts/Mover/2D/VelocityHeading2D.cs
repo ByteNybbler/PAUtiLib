@@ -16,6 +16,7 @@ public class VelocityHeading2D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rotator.SetAngle(UtilHeading2D.DegreesFromHeadingVector(mover.GetVelocity()));
+        rotator.SetAngle(Angle.FromHeadingVector(mover.GetVelocity()));
+            //UtilHeading2D.DegreesFromHeadingVector(mover.GetVelocity()));
     }
 }

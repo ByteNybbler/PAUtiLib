@@ -1,7 +1,7 @@
 ﻿// Author(s): Paul Calande
-// MonoPeriodicVar for integers.
+// MonoTimedVar for integers.
 
-public class MonoPeriodicInt : MonoPeriodicVar<int>
+public class MonoTimedInt : MonoTimedVar<int>
 {
     public void AddVar(int amount)
     {

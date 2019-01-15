@@ -48,6 +48,7 @@ public static class UtilApproach
         return current;
     }
 
+    /*
     // Like the approach float function, but rotates current along the shortest path
     // to the target, like an angle moving along a circle towards a different angle.
     public static float AngleDegrees(float current, float target, float stepSize)
@@ -61,6 +62,7 @@ public static class UtilApproach
         current += stepSize * UtilCircle.SignShortestRotationDegrees(current, target);
         return current;
     }
+    */
 
     // Approaches the Vector2 (potentially a 2D position) with the given velocity.
     // If the velocity isn't pointing from current to target, this might miss the target.

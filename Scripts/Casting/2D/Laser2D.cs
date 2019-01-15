@@ -37,7 +37,8 @@ public class Laser2D : MonoBehaviour
 
     public void SetDirection(float degrees)
     {
-        SetDirection(UtilHeading2D.HeadingVectorFromDegrees(degrees));
+        SetDirection(Angle.FromDegrees(degrees).GetHeadingVector());
+        //SetDirection(UtilHeading2D.HeadingVectorFromDegrees(degrees));
     }
 
     public void SetMaxDistance(float maxDistance)

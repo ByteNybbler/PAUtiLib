@@ -9,15 +9,15 @@ public class TriggerNewDownDirection2D : MonoBehaviour
 {
     [SerializeField]
     [Tooltip("The new down direction, measured in degrees.")]
-    float downDirectionDegrees = 270.0f;
+    Angle downDirection;
 
-    public float GetDownDirectionDegrees()
+    public Angle GetDownDirection()
     {
-        return downDirectionDegrees;
+        return downDirection;
     }
 
-    public void SetDownDirectionDegrees(float degrees)
+    public void SetDownDirection(Angle angle)
     {
-        downDirectionDegrees = degrees;
+        downDirection = angle;
     }
 }

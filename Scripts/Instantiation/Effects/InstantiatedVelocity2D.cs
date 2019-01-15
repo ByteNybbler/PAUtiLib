@@ -18,7 +18,7 @@ public class InstantiatedVelocity2D : InstantiatedProperty<float>
     {
         float magnitude = UtilRandom.RangeWithCenter(valueCenter, valueRadius);
         float direction = UtilRandom.RangeWithCenter(directionCenter, directionRadius);
-        Vector2 velocity = UtilHeading2D.HeadingVectorFromDegrees(direction) * magnitude;
+        Vector2 velocity = Angle.FromDegrees(direction).GetHeadingVector() * magnitude;
         obj.GetComponent<Velocity2D>().SetVelocity(velocity);
     }
 }
