@@ -14,6 +14,7 @@ public interface ITimer
     float GetSecondsPassed();
     float GetSecondsRemaining();
     float GetPercentFinished();
+    float GetPercentRemaining();
     void SubscribeToFinished(Timer.FinishedHandler Callback);
     void SubscribeToStarted(Timer.StartedHandler Callback);
     void SubscribeToStopped(Timer.StoppedHandler Callback);

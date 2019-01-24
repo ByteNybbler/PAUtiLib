@@ -123,6 +123,11 @@ public class MonoTimer : MonoBehaviour, ITimer
         return timer.GetPercentFinished();
     }
 
+    public float GetPercentRemaining()
+    {
+        return timer.GetPercentRemaining();
+    }
+
     public bool Run(float secondsOverflow = 0.0f)
     {
         return timer.Run(secondsOverflow);

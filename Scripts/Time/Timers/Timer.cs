@@ -147,10 +147,17 @@ public class Timer : ITimer
     }
 
     // Returns how close (in percent) the timer is to reaching the target time.
-    // 1.0 (100%) means the timer has reached the target time.
+    // 1.0f (100%) means the timer has reached the target time.
     public float GetPercentFinished()
     {
         return secondsPassed / secondsTarget;
+    }
+
+    // Returns how much percent remains before the timer runs out of time.
+    // 0.0f (0%) means the timer has reached the target time.
+    public float GetPercentRemaining()
+    {
+        return 1.0f - GetPercentFinished();
     }
 
     // Change the timer's finished callback function.
