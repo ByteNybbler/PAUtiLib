@@ -29,7 +29,7 @@ public class FadeTrail : MonoBehaviour
         fader.transform.localScale = trans.lossyScale;
         fader.GetComponent<SpriteRenderer>().sprite = accessor.Get();
         MonoTimer fadeTimer = fader.GetComponent<MonoTimer>();
-        fadeTimer.SetTargetTime(secondsToFade);
+        fadeTimer.SetSecondsTarget(secondsToFade);
         fadeTimer.Run();
     }
 }

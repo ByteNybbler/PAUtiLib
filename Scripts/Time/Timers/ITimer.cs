@@ -9,9 +9,10 @@ public interface ITimer
     bool Stop();
     void Clear();
     bool IsRunning();
-    void SetTargetTime(float seconds);
-    float GetTargetTime();
-    float GetCurrentTime();
+    void SetSecondsTarget(float seconds);
+    float GetSecondsTarget();
+    float GetSecondsPassed();
+    float GetSecondsRemaining();
     float GetPercentFinished();
     void SubscribeToFinished(Timer.FinishedHandler Callback);
     void SubscribeToStarted(Timer.StartedHandler Callback);

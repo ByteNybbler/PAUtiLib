@@ -20,7 +20,7 @@ public class CompTimerActionCooldown
     private void TimerActionCallback(float secondsOverflow)
     {
         // Action finished. Start the cooldown.
-        timerCooldown.Run();
+        timerCooldown.Run(secondsOverflow);
         actionFinishedCallback(secondsOverflow);
     }
 

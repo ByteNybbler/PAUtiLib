@@ -9,6 +9,6 @@ public class InstantiatedMonoTimer : InstantiatedProperty<float>
 {
     protected override void Instantiated(GameObject obj, float secondsOverflow)
     {
-        obj.GetComponent<MonoTimer>().SetTargetTime(UtilRandom.RangeWithCenter(valueCenter, valueRadius));
+        obj.GetComponent<MonoTimer>().SetSecondsTarget(UtilRandom.RangeWithCenter(valueCenter, valueRadius));
     }
 }

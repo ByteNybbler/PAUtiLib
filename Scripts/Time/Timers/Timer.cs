@@ -1,5 +1,6 @@
 ﻿// Author(s): Paul Calande
-// Timer class that can be used to simulate periodic time-based behavior.
+// Timer class that can be used to simulate periodic or otherwise time-based behavior.
+// The secondsCurrent counter starts at 0 and counts upwards to the target.
 
 public class Timer : ITimer
 {
@@ -27,12 +28,12 @@ public class Timer : ITimer
     Runner runner;
     // Whether the timer should run on a loop.
     // A looping timer will start over each time it reaches the target time.
-    bool loop = true;
+    bool loop;
     // Whether the timer is cleared every time it is run.
-    bool clearOnRun = false;
+    bool clearOnRun;
 
-    // The current number of seconds passed in this period.
-    float secondsCurrent = 0.0f;
+    // The current number of seconds passed in this period/cycle.
+    float secondsPassed = 0.0f;
 
     // Constructor.
     public Timer(float seconds, FinishedHandler FinishedCallback = null, bool loop = true,
@@ -49,7 +50,7 @@ public class Timer : ITimer
         runner = new Runner(OnStarted, OnStopped);
     }
 
-    // Increase the time passed for this timer by the given amount.
+    // Increases the time passed for this timer by the given amount.
     public void Tick(float deltaTime)
     {
         // If the timer isn't running, this method does nothing.
@@ -58,20 +59,20 @@ public class Timer : ITimer
             return;
         }
         // Increase the time passed.
-        secondsCurrent += deltaTime;
+        secondsPassed += deltaTime;
         // Notify any subscribers that the timer has successfully ticked.
         OnTicked();
         // Check if the timer has finished (i.e. reached its target time).
         // Timers with a very short target time may finish multiple times per
         // update step, so we need to use a while loop to account for multiple
         // timer completions per update step.
-        while (secondsCurrent >= secondsTarget)
+        while (secondsPassed >= secondsTarget)
         {
             // Decrement the time passed to prepare for another loop of this block.
             // The result of this operation is also used to get how many seconds
             // the timer ran past its target time.
-            secondsCurrent -= secondsTarget;
-            float secondsOverflow = secondsCurrent;
+            secondsPassed -= secondsTarget;
+            float secondsOverflow = secondsPassed;
             // If the timer doesn't loop, just stop the timer altogether.
             if (!loop)
             {
@@ -97,7 +98,7 @@ public class Timer : ITimer
         bool startedNow = runner.Run();
         if (startedNow)
         {
-            secondsCurrent += secondsOverflow;
+            secondsPassed += secondsOverflow;
         }
         return startedNow;
     }
@@ -111,7 +112,7 @@ public class Timer : ITimer
     // Resets the timer.
     public void Clear()
     {
-        secondsCurrent = 0.0f;
+        secondsPassed = 0.0f;
     }
 
     // Returns true if the timer is running.
@@ -120,29 +121,36 @@ public class Timer : ITimer
         return runner.IsRunning();
     }
 
-    // Change the target time on the timer.
-    public void SetTargetTime(float seconds)
+    // Sets the target time on the timer.
+    public void SetSecondsTarget(float seconds)
     {
         secondsTarget = seconds;
     }
 
-    // Get the target time on the timer.
-    public float GetTargetTime()
+    // Returns the target time on the timer.
+    // This is how many seconds must pass to complete a cycle.
+    public float GetSecondsTarget()
     {
         return secondsTarget;
     }
 
-    // Get the current time on the timer.
-    public float GetCurrentTime()
+    // Returns how many seconds have passed on this timer cycle.
+    public float GetSecondsPassed()
     {
-        return secondsCurrent;
+        return secondsPassed;
+    }
+
+    // Returns how many seconds remain on this timer cycle.
+    public float GetSecondsRemaining()
+    {
+        return secondsTarget - secondsPassed;
     }
 
     // Returns how close (in percent) the timer is to reaching the target time.
     // 1.0 (100%) means the timer has reached the target time.
     public float GetPercentFinished()
     {
-        return secondsCurrent / secondsTarget;
+        return secondsPassed / secondsTarget;
     }
 
     // Change the timer's finished callback function.

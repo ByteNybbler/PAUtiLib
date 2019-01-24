@@ -37,7 +37,7 @@ public class RandomSFXPeriodic : MonoBehaviour
     {
         AudioClip clip = sounds.GetRandomElement();
         ac.PlaySFX(clip);
-        timer.SetTargetTime(clip.length + UtilRandom.RangeWithCenter(
+        timer.SetSecondsTarget(clip.length + UtilRandom.RangeWithCenter(
             secondsBetweenSounds, secondsBetweenSoundsVariance));
     }
 

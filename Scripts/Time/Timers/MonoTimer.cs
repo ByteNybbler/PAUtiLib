@@ -94,23 +94,28 @@ public class MonoTimer : MonoBehaviour, ITimer
         }
     }
 
-    public void SetTargetTime(float seconds)
+    public void SetSecondsTarget(float seconds)
     {
         this.seconds = seconds;
         if (timer != null)
         {
-            timer.SetTargetTime(seconds);
+            timer.SetSecondsTarget(seconds);
         }
     }
 
-    public float GetTargetTime()
+    public float GetSecondsTarget()
     {
         return seconds;
     }
 
-    public float GetCurrentTime()
+    public float GetSecondsPassed()
     {
-        return timer.GetCurrentTime();
+        return timer.GetSecondsPassed();
+    }
+
+    public float GetSecondsRemaining()
+    {
+        return timer.GetSecondsRemaining();
     }
 
     public float GetPercentFinished()

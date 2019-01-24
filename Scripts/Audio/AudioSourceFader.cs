@@ -55,7 +55,7 @@ public class AudioSourceFader
         }
         else
         {
-            timerFade.SetTargetTime(secondsToFade);
+            timerFade.SetSecondsTarget(secondsToFade);
             timerFade.Run();
             interpolator.SetTargetValue(targetVolume);
         }
