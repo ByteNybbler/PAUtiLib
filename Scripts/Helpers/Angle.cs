@@ -2,6 +2,8 @@
 // Angle class with several different read-only repesentations,
 // including degrees and radians.
 // This class also includes various other angle-related utility functions.
+// The internal angle representation is not clamped to the smallest possible coterminals.
+// This is necessary because some rotations may be larger than 360 degrees.
 
 using System.Collections;
 using System.Collections.Generic;
@@ -23,14 +25,14 @@ public class Angle : IDeepCopyable<Angle>
 
     // Unsigned interval for angles, in radians: [0, 2*pi).
     public static readonly IntervalFloat INTERVAL_UNSIGNED_RADIANS
-        = IntervalFloat.FromStartEnd(0.0f, Mathf.PI * 2);
+        = IntervalFloat.FromStartEnd(0.0f, TWO_PI);
 
     // Signed interval for angles, in radians: [-pi. pi).
     public static readonly IntervalFloat INTERVAL_SIGNED_RADIANS
         = IntervalFloat.FromStartEnd(-Mathf.PI, Mathf.PI);
 
     [SerializeField]
-    [Tooltip("The degree measure of the angle."
+    [Tooltip("The degree measure of the angle. "
         + "The radian measure is also obtained using this value.")]
     float degrees;
 
@@ -66,10 +68,16 @@ public class Angle : IDeepCopyable<Angle>
     {
         return Angle.FromDegreesRandom();
     }
-    // Constructs an angle (in signed degrees) from the given heading vector.
+    // Constructs an angle from the given heading vector.
     public static Angle FromHeadingVector(Vector2 heading)
     {
-        return new Angle(Vector2.SignedAngle(Vector2.right, heading));
+        float degrees = Vector2.SignedAngle(Vector2.right, heading);
+        degrees = INTERVAL_UNSIGNED_DEGREES.Remainder(degrees);
+        return Angle.FromDegrees(degrees);
+    }
+    public static Angle FromHeadingVector(float x, float y)
+    {
+        return Angle.FromHeadingVector(new Vector2(x, y));
     }
     // Returns a wheel's angular velocity based on its linear velocity and radius.
     public static Angle FromAngularVelocity(float linearVelocity, float radius)
@@ -91,40 +99,81 @@ public class Angle : IDeepCopyable<Angle>
     }
     */
 
-    // Constructs an angle from another angle.
-    public static Angle DeepCopy(Angle otherAngle)
-    {
-        return new Angle(otherAngle.degrees);
-    }
+    // Creates a copy of the given angle.
     public Angle DeepCopy()
     {
         return new Angle(degrees);
     }
+    public static Angle DeepCopy(Angle otherAngle)
+    {
+        return otherAngle.DeepCopy();
+    }
 
-    // Returns the degree measure of the angle.
+    // Returns a measurement of the angle.
+    // This is not the measurement of the smallest possible coterminal.
     public float GetDegrees()
     {
         return degrees;
     }
-
-    // Returns the unsigned degree measure of the angle.
-    public float GetDegreesUnsigned()
-    {
-        return INTERVAL_UNSIGNED_DEGREES.Remainder(degrees);
-            //UtilPeriodic.MoveIntoInterval(degrees, INTERVAL_UNSIGNED_DEGREES);
-    }
-
-    // Returns the signed degree measure of the angle.
-    public float GetDegreesSigned()
-    {
-        return INTERVAL_SIGNED_DEGREES.Remainder(degrees);
-            //UtilPeriodic.MoveIntoInterval(degrees, INTERVAL_SIGNED_DEGREES);
-    }
-
-    // Returns the radian measure of the angle.
     public float GetRadians()
     {
         return degrees * Mathf.Deg2Rad;
+    }
+
+    // Returns the unsigned coterminal measure of the angle.
+    public float GetDegreesUnsigned()
+    {
+        return INTERVAL_UNSIGNED_DEGREES.Remainder(degrees);
+    }
+    public float GetRadiansUnsigned()
+    {
+        return INTERVAL_UNSIGNED_RADIANS.Remainder(GetRadians());
+    }
+
+    // Returns the signed coterminal measure of the angle.
+    public float GetDegreesSigned()
+    {
+        return INTERVAL_SIGNED_DEGREES.Remainder(degrees);
+    }
+    public float GetRadiansSigned()
+    {
+        return INTERVAL_SIGNED_RADIANS.Remainder(GetRadians());
+    }
+
+    // Converts an angle to the coterminal angle within the [-180, 180) range.
+    public Angle ToCoterminalSigned()
+    {
+        degrees = GetDegreesSigned();
+        return this;
+    }
+    public Angle GetCoterminalSigned()
+    {
+        return DeepCopy().ToCoterminalSigned();
+    }
+
+    // Converts an angle to the coterminal angle within the [0, 360) range.
+    public Angle ToCoterminalUnsigned()
+    {
+        degrees = GetDegreesUnsigned();
+        return this;
+    }
+    public Angle GetCoterminalUnsigned()
+    {
+        return DeepCopy().ToCoterminalUnsigned();
+    }
+
+    // Converts an angle to an equivalent angle within the range with the given center.
+    // The range will always be 360 degrees in size.
+    public Angle ToCoterminal(Angle centerOfTheInterval)
+    {
+        IntervalFloat interval = IntervalFloat.FromCenterRadius(
+            centerOfTheInterval.GetDegrees(), 180.0f);
+        degrees = interval.Remainder(degrees);
+        return this;
+    }
+    public Angle GetCoterminal(Angle centerOfTheInterval)
+    {
+        return DeepCopy().ToCoterminal(centerOfTheInterval);
     }
 
     // Returns a unit vector pointing in the direction given by the angle.
@@ -168,12 +217,20 @@ public class Angle : IDeepCopyable<Angle>
         degrees = INTERVAL_UNSIGNED_DEGREES.Reverse(degrees);
         return this;
     }
+    public Angle GetReverse()
+    {
+        return DeepCopy().Reverse();
+    }
 
     // Mirrors an angle across the y-axis of a circle.
     public Angle MirrorHorizontal()
     {
         degrees = INTERVAL_UNSIGNED_DEGREES.MirrorHorizontal(degrees);
         return this;
+    }
+    public Angle GetMirrorHorizontal()
+    {
+        return DeepCopy().MirrorHorizontal();
     }
 
     // Mirrors an angle across the x-axis of a circle.
@@ -182,46 +239,35 @@ public class Angle : IDeepCopyable<Angle>
         degrees = INTERVAL_UNSIGNED_DEGREES.MirrorVertical(degrees);
         return this;
     }
-
-    // Converts an angle to an equivalent angle within the range with the given center.
-    // The range will always be 360 degrees in size.
-    public Angle Remainder(Angle centerOfTheInterval)
+    public Angle GetMirrorVertical()
     {
-        IntervalFloat interval = IntervalFloat.FromCenterRadius(
-            centerOfTheInterval.GetDegrees(), 180.0f);
-        degrees = interval.Remainder(degrees);
-        return this;
+        return DeepCopy().MirrorVertical();
     }
 
-    // Converts an angle to an equivalent angle within the [-180, 180) range.
-    public Angle RemainderSigned()
+    /*
+    // Returns this angle's reference angle.
+    // This is the acute angle between the x-axis and the given angle.
+    public Angle GetReference()
     {
-        degrees = INTERVAL_SIGNED_DEGREES.Remainder(degrees);
-        return this;
+        return new Angle(0.0f);
     }
+    */
 
-    // Converts an angle to an equivalent angle within the [0, 360) range.
-    public Angle RemainderUnsigned()
-    {
-        degrees = INTERVAL_UNSIGNED_DEGREES.Remainder(degrees);
-        return this;
-    }
-
-    // Returns the smaller distance between the two angles.
+    // Returns the smaller distance between the two angles' coterminals.
     public static Angle GetSmallerDistance(Angle angle1, Angle angle2)
     {
         return Angle.FromDegrees(INTERVAL_UNSIGNED_DEGREES.GetSmallerDistance(
             angle1.GetDegrees(), angle2.GetDegrees()));
     }
 
-    // Returns the larger distance between the two angles.
+    // Returns the larger distance between the two angles' coterminals.
     public static Angle GetLargerDistance(Angle angle1, Angle angle2)
     {
         return Angle.FromDegrees(INTERVAL_UNSIGNED_DEGREES.GetLargerDistance(
             angle1.GetDegrees(), angle2.GetDegrees()));
     }
 
-    // Returns true if the shortest path between the two given angles is a
+    // Returns true if the shortest path between the two given angles' coterminals is a
     // positive (counterclockwise on the unit circle) rotation from the start angle.
     public static bool IsShortestRotationPositive(Angle start, Angle end)
     {
@@ -229,16 +275,40 @@ public class Angle : IDeepCopyable<Angle>
             start.GetDegrees(), end.GetDegrees());
     }
 
+    // Returns true if both angles are coterminal.
+    // Coterminal angles are angles that share a common terminal side.
+    // 30 degrees, 390 degrees, and -330 degrees are all coterminal to each other.
+    // Angles are also coterminal with themselves.
+    // This method can be used as a broad check for directional equality between angles.
+    public bool IsCoterminal(Angle other)
+    {
+        return GetDegreesUnsigned() == other.GetDegreesUnsigned();
+    }
+    public static bool IsCoterminal(Angle first, Angle second)
+    {
+        return first.IsCoterminal(second);
+    }
+
     // Like the approach float function, but rotates current along the shortest path
     // to the target, like an angle moving along a circle towards a different angle.
-    public Angle Approach(Angle target, Angle stepSize)
+    // This method utilizes both angles' coterminals, so having a rotation
+    // greater than 360 degrees is not feasible without changing the target.
+    public Angle ApproachCoterminal(Angle target, Angle stepSize,
+        bool useShorterPath = true)
     {
         degrees = INTERVAL_UNSIGNED_DEGREES.Approach(degrees, target.GetDegrees(),
-            stepSize.GetDegrees());
+            stepSize.GetDegrees(), useShorterPath);
         return this;
     }
 
-    // Returns the sign of the shortest rotation between the two angles.
+    // Move one angle towards another without considering coterminality.
+    public Angle ApproachRaw(Angle target, Angle stepSize)
+    {
+        degrees = UtilApproach.Float(degrees, target.degrees, stepSize.degrees);
+        return this;
+    }
+
+    // Returns the sign of the shortest rotation between the two angles' coterminals.
     public static int SignShortestRotation(Angle start, Angle end)
     {
         return INTERVAL_UNSIGNED_DEGREES.SignShortestRotation(
@@ -250,11 +320,18 @@ public class Angle : IDeepCopyable<Angle>
     {
         return Angle.FromDegrees(first.degrees * second);
     }
-
+    public static Angle operator /(Angle first, float second)
+    {
+        return Angle.FromDegrees(first.degrees / second);
+    }
     // Add two angles together, combining their measures.
     public static Angle operator +(Angle first, Angle second)
     {
         return Angle.FromDegrees(first.degrees + second.degrees);
+    }
+    public static Angle operator -(Angle first, Angle second)
+    {
+        return Angle.FromDegrees(first.degrees - second.degrees);
     }
 
     // Angle measure comparisons.

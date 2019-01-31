@@ -13,21 +13,16 @@ public class CameraUpDirection2D : MonoBehaviour
     [Tooltip("The up direction to rotate to.")]
     UpDirection2D upDirection;
     [SerializeField]
-    [Tooltip("The rotation speed in degrees per second.")]
-    float rotationSpeed = 360.0f;
+    [Tooltip("The rotation speed.")]
+    Angle rotationSpeed = Angle.FromDegrees(360.0f);
 
     private void FixedUpdate()
     {
         Vector3 euler = transform.eulerAngles;
-        euler.z = Angle.FromDegrees(euler.z).Approach(
+        euler.z = Angle.FromDegrees(euler.z).ApproachCoterminal(
             upDirection.GetUpAngle().AddDegrees(-90.0f),
-            Angle.FromDegrees(rotationSpeed * timeScale.DeltaTime()))
+            rotationSpeed * timeScale.DeltaTime())
             .GetDegrees();
-        //UtilPeriodic.Approach()
-        /*
-            UtilApproach.AngleDegrees(euler.z,
-            upDirection.GetUpAngle() - 90.0f, rotationSpeed * timeScale.DeltaTime());
-            */
         transform.rotation = Quaternion.Euler(euler);
     }
 }

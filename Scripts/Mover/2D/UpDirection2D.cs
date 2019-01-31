@@ -14,13 +14,7 @@ public class UpDirection2D : MonoBehaviour
 
     [SerializeField]
     [Tooltip("The angle corresponding to the upwards direction.")]
-    //float upAngle = 90.0f;
     Angle upAngle = Angle.FromDegrees(90.0f);
-
-    private void Awake()
-    {
-        NormalizeAngle();
-    }
 
     // Returns the angle corresponding to the upwards direction.
     public Angle GetUpAngle()
@@ -28,23 +22,16 @@ public class UpDirection2D : MonoBehaviour
         return upAngle.DeepCopy();
     }
 
-    private void NormalizeAngle()
-    {
-        upAngle.RemainderUnsigned();
-    }
-
     // Changes the angle corresponding to the upwards direction.
     public void SetUpAngle(Angle angle)
     {
         upAngle = angle;
-        NormalizeAngle();
         OnUpAngleChanged();
     }
 
     // Sets the up angle based on the given down angle.
     public void SetDownAngle(Angle angle)
     {
-        //SetUpAngle(Angle.FromDegrees(angle.GetDegrees() + 180.0f));
         SetUpAngle(angle.Reverse());
     }
 
@@ -52,7 +39,6 @@ public class UpDirection2D : MonoBehaviour
     public Vector2 GetUpVector()
     {
         return upAngle.GetHeadingVector();
-            //UtilHeading2D.HeadingVectorFromDegrees(upAngle.GetDegrees());
     }
     
     // Returns the vector corresponding to the downwards direction.

@@ -13,7 +13,8 @@ public class PAUtiLibUnitTest : MonoBehaviour
     string currentSuiteName = "UNNAMED";
 
     // Test an assertion.
-    void Test(bool assertion, string extraInfo = "")
+    void Test(bool assertion,
+        string extraInfo = "Assertion failed.")
     {
         ++currentTestNumber;
         if (!assertion)
@@ -49,5 +50,11 @@ public class PAUtiLibUnitTest : MonoBehaviour
         Angle b = Angle.FromDegrees(310.0f);
         TestEqual(Angle.GetLargerDistance(a, b).GetDegrees(), 290.0f);
         TestEqual(Angle.GetSmallerDistance(b, a).GetDegrees(), 70.0f);
+        TestEqual(Angle.FromHeadingVector(1.0f, 0.0f).GetDegrees(), 0.0f);
+        TestEqual(Angle.FromHeadingVector(0.0f, 1.0f).GetDegrees(), 90.0f);
+        TestEqual(Angle.FromHeadingVector(-1.0f, 0.0f).GetDegrees(), 180.0f);
+        TestEqual(Angle.FromHeadingVector(0.0f, -1.0f).GetDegrees(), 270.0f);
+        Test(Angle.FromDegrees(30.0f).IsCoterminal(Angle.FromDegrees(-330.0f)));
+        Test(Angle.FromDegrees(30.0f).IsCoterminal(Angle.FromDegrees(390.0f)));
     }
 }

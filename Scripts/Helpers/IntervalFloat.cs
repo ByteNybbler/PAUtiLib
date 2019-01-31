@@ -9,11 +9,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class IntervalFloat
 {
-    // The start of the interval.
+    [SerializeField]
+    [Tooltip("The start of the interval.")]
     private float start;
-    // The end of the interval.
+    [SerializeField]
+    [Tooltip("The end of the interval.")]
     private float end;
 
     // Private constructors mean that this class can only be constructed
@@ -191,7 +194,8 @@ public class IntervalFloat
 
     // Like the approach float function, but rotates current along the shortest path
     // to the target, like an angle moving along a circle towards a different angle.
-    public float Approach(float current, float target, float stepSize)
+    public float Approach(float current, float target, float stepSize,
+        bool useShorterPath = true)
     {
         current = Remainder(current);
         target = Remainder(target);
@@ -199,7 +203,8 @@ public class IntervalFloat
         {
             return target;
         }
-        current += stepSize * SignShortestRotation(current, target);
+        current += stepSize * SignShortestRotation(current, target)
+            * UtilMath.Sign(useShorterPath);
         return current;
     }
 }

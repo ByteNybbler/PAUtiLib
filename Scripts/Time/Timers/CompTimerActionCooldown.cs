@@ -52,6 +52,16 @@ public class CompTimerActionCooldown
         return timerCooldown.IsRunning();
     }
 
+    public float GetActionPercentFinished()
+    {
+        return timerAction.GetPercentFinished();
+    }
+
+    public float GetCooldownPercentFinished()
+    {
+        return timerCooldown.GetPercentFinished();
+    }
+
     // Tries to start the action timer, effectively performing the action.
     // Returns true if it starts successfully. Returns false otherwise.
     // It will return false if the composite timer is already running.
