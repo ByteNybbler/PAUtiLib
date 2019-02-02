@@ -26,24 +26,12 @@ public class PAUtiLibUnitTest : MonoBehaviour
         }
     }
 
-    /*
-    void TestEqual(float lhs, float rhs)
-    {
-        Test(lhs == rhs, "LHS = " + lhs + "; RHS = " + rhs);
-    }
-
-    void TestEqual(int lhs, int rhs)
-    {
-        Test(lhs == rhs, "LHS = " + lhs + "; RHS = " + rhs);
-    }
-    */
-
     void TestEqual<T>(T lhs, T rhs)
     {
         Test(UtilGeneric.IsEqualTo(lhs, rhs), "LHS = " + lhs + "; RHS = " + rhs);
     }
 
-    // Enter a new test suite.
+    // Begin a new test suite.
     void EnterNewSuite(string newSuiteName)
     {
         currentSuiteName = newSuiteName;
