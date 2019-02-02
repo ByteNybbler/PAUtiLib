@@ -43,12 +43,12 @@ public class PAUtiLibUnitTest : MonoBehaviour
         EnterNewSuite("Angles");
         Angle a = Angle.FromDegrees(20.0f);
         Angle b = Angle.FromDegrees(310.0f);
-        TestEqual(Angle.GetLargerDistance(a, b).GetDegrees(), 290.0f);
-        TestEqual(Angle.GetSmallerDistance(b, a).GetDegrees(), 70.0f);
-        TestEqual(Angle.FromHeadingVector(1.0f, 0.0f).GetDegrees(), 0.0f);
-        TestEqual(Angle.FromHeadingVector(0.0f, 1.0f).GetDegrees(), 90.0f);
-        TestEqual(Angle.FromHeadingVector(-1.0f, 0.0f).GetDegrees(), 180.0f);
-        TestEqual(Angle.FromHeadingVector(0.0f, -1.0f).GetDegrees(), 270.0f);
+        TestEqual(Angle.GetLargerDistance(a, b).GetDegreesUnsigned(), 290.0f);
+        TestEqual(Angle.GetSmallerDistance(b, a).GetDegreesUnsigned(), 70.0f);
+        TestEqual(Angle.FromHeadingVector(1.0f, 0.0f).GetDegreesUnsigned(), 0.0f);
+        TestEqual(Angle.FromHeadingVector(0.0f, 1.0f).GetDegreesUnsigned(), 90.0f);
+        TestEqual(Angle.FromHeadingVector(-1.0f, 0.0f).GetDegreesUnsigned(), 180.0f);
+        TestEqual(Angle.FromHeadingVector(0.0f, -1.0f).GetDegreesUnsigned(), 270.0f);
         Test(Angle.FromDegrees(30.0f).IsCoterminal(Angle.FromDegrees(-330.0f)));
         Test(Angle.FromDegrees(30.0f).IsCoterminal(Angle.FromDegrees(390.0f)));
 

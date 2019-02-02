@@ -72,13 +72,25 @@ public class Angle : IDeepCopyable<Angle>
     public static Angle FromHeadingVector(Vector2 heading)
     {
         float degrees = Vector2.SignedAngle(Vector2.right, heading);
-        degrees = INTERVAL_UNSIGNED_DEGREES.Remainder(degrees);
+        //degrees = INTERVAL_UNSIGNED_DEGREES.Remainder(degrees);
         return Angle.FromDegrees(degrees);
     }
     public static Angle FromHeadingVector(float x, float y)
     {
         return Angle.FromHeadingVector(new Vector2(x, y));
     }
+    /*
+    // Returns the angle on the plane perpendicular to any 3D axis.
+    public static Angle FromHeadingVectorPerpendicular(Vector2 heading)
+    {
+        return Angle.FromHeadingVector(heading).MirrorHorizontal().AddDegrees(-90.0f);
+    }
+    // Returns the angle on the plane perpendicular to the Y axis.
+    public static Angle FromHeadingVectorY(Vector3 heading)
+    {
+        return Angle.FromHeadingVectorPerpendicular(Swizzle.Vec2(heading, "xz"));
+    }
+    */
     // Returns a wheel's angular velocity based on its linear velocity and radius.
     public static Angle FromAngularVelocity(float linearVelocity, float radius)
     {
