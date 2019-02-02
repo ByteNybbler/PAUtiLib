@@ -26,6 +26,7 @@ public class PAUtiLibUnitTest : MonoBehaviour
         }
     }
 
+    /*
     void TestEqual(float lhs, float rhs)
     {
         Test(lhs == rhs, "LHS = " + lhs + "; RHS = " + rhs);
@@ -34,6 +35,12 @@ public class PAUtiLibUnitTest : MonoBehaviour
     void TestEqual(int lhs, int rhs)
     {
         Test(lhs == rhs, "LHS = " + lhs + "; RHS = " + rhs);
+    }
+    */
+
+    void TestEqual<T>(T lhs, T rhs)
+    {
+        Test(UtilGeneric.IsEqualTo(lhs, rhs), "LHS = " + lhs + "; RHS = " + rhs);
     }
 
     // Enter a new test suite.
@@ -56,5 +63,13 @@ public class PAUtiLibUnitTest : MonoBehaviour
         TestEqual(Angle.FromHeadingVector(0.0f, -1.0f).GetDegrees(), 270.0f);
         Test(Angle.FromDegrees(30.0f).IsCoterminal(Angle.FromDegrees(-330.0f)));
         Test(Angle.FromDegrees(30.0f).IsCoterminal(Angle.FromDegrees(390.0f)));
+
+        EnterNewSuite("Generics");
+        TestEqual(UtilGeneric.Add<int, int, int>(5, 7), 12);
+        Vector3 start = new Vector3(1, 0, 0);
+        Vector3 end = new Vector3(16, 0, 0);
+        Vector3 velocity = new Vector3(5, 0, 0);
+        TestEqual(UtilVelocity.GetVelocity(start, end, 3.0f), velocity);
+        TestEqual(UtilVelocity.GetFuturePosition(2.0f, 3.0f, 6.0f), 20.0f);
     }
 }

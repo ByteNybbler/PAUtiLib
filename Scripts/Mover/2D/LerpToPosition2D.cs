@@ -37,7 +37,7 @@ public class LerpToPosition2D : MonoBehaviour
     public void LerpToInTime(Vector2 destination, float seconds)
     {
         this.destination = destination;
-        velocity = UtilPredict.ConstantVelocity(mover.GetPosition(), destination, seconds);
+        velocity = UtilVelocity.GetVelocity(mover.GetPosition(), destination, seconds);
         lerping = true;
     }
 
