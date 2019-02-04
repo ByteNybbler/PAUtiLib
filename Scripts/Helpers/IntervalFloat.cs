@@ -41,6 +41,14 @@ public class IntervalFloat
     {
         return FromCenterRadius(center, diameter * 0.5f);
     }
+    public static IntervalFloat FromRadius(float radius)
+    {
+        return FromCenterRadius(0.0f, radius);
+    }
+    public static IntervalFloat FromDiameter(float diameter)
+    {
+        return FromRadius(diameter * 0.5f);
+    }
 
     // Returns the start of the interval.
     public float GetStart()
@@ -52,11 +60,6 @@ public class IntervalFloat
     {
         return end;
     }
-    // Returns the center of the interval.
-    public float GetCenter()
-    {
-        return (start + end) * 0.5f;
-    }
     // Returns the diameter of the interval.
     public float GetDiameter()
     {
@@ -66,6 +69,23 @@ public class IntervalFloat
     public float GetRadius()
     {
         return GetDiameter() * 0.5f;
+    }
+    // Returns the Lerp between the interval's start and end by t.
+    public float Lerp(float t)
+    {
+        return Mathf.Lerp(start, end, t);
+    }
+    // Returns the center of the interval.
+    public float GetCenter()
+    {
+        return (start + end) * 0.5f;
+    }
+    // Sets the center of the interval while preserving the diameter.
+    public void SetCenter(float center)
+    {
+        float radius = GetRadius();
+        start = center - radius;
+        end = center + radius;
     }
 
     // Returns an array of floats that are evenly spaced out from each other
@@ -77,7 +97,7 @@ public class IntervalFloat
         float difference = end - start;
         if (count == 1)
         {
-            result.Add(start + difference * 0.5f);
+            result.Add(GetCenter());
         }
         else
         {
